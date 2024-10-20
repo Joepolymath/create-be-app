@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const colors = require('picocolors');
 const argv = require('minimist')(process.argv.slice(2));
 
-const { green } = colors;
+const { green, red } = colors;
 
 async function init() {
   console.log(green('create-be-app running'));
@@ -20,7 +20,7 @@ async function init() {
   await fs.ensureDir(root);
   const existing = await fs.readdir(root);
   if (existing.length) {
-    console.error(`Error: target directory is not empty.`);
+    console.error(red(`Error: target directory is not empty.`));
     process.exit(1);
   }
 
@@ -51,10 +51,10 @@ async function init() {
 
   console.log(`\nDone. Now run:\n`);
   if (root !== cwd) {
-    console.log(`  cd ${path.relative(cwd, root)}`);
+    console.log(green(`  cd ${path.relative(cwd, root)}`));
   }
-  console.log(`  npm install (or \`yarn\`)`);
-  console.log(`  npm run dev (or \`yarn dev\`)`);
+  console.log(green(`  npm install (or \`yarn\`)`));
+  console.log(green(`  npm run dev (or \`yarn dev\`)`));
   console.log();
 }
 
