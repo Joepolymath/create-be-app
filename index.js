@@ -53,8 +53,8 @@ async function init() {
   if (root !== cwd) {
     console.log(green(`  cd ${path.relative(cwd, root)}`));
   }
-  console.log(green(`  npm install (or \`yarn\`)`));
-  console.log(green(`  npm run dev (or \`yarn dev\`)`));
+  console.log(green(`  npm install (or \`yarn\` or \`pnpm\`)`));
+  console.log(green(`  npm run dev (or \`yarn dev\` or \`pnpm\`)`));
   console.log();
 }
 
