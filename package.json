@@ -1,0 +1,29 @@
+{
+  "name": "create-be-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "create-be-app": "index.js",
+    "cba": "index.js"
+  },
+  "scripts": {},
+  "files": [
+    "index.js",
+    "template-*"
+  ],
+  "keywords": [
+    "backend",
+    "bootstrap",
+    "express",
+    "scaffold"
+  ],
+  "author": "Joshua Ajagbe",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "minimist": "^1.2.8",
+    "picocolors": "^1.1.1",
+    "prompts": "^2.4.2"
+  }
+}
