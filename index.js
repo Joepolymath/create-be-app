@@ -6,12 +6,29 @@ const argv = require('minimist')(process.argv.slice(2));
 
 const { green, red } = colors;
 
+// template pattern => template|framework|architecture|db|language
+
+const checkIfTemplateExists = async (templateDirectory) => {
+  try {
+    const exists = await fs.pathExists(templateDirectory);
+    return exists;
+  } catch (error) {
+    console.error(red('Could not check template directory'));
+  }
+};
+
 async function init() {
   console.log(green('create-be-app running'));
 
+  const framework = argv.f || argv.framework || 'express';
+  const architecture = argv.a || argv.arch || 'basic';
+  const db = argv.d || argv.database || argv.db || 'mongodb';
+  const language = argv.l || argv.language || 'js';
   const targetDir = argv._[0] || '.';
   const cwd = process.cwd();
   const root = path.join(cwd, targetDir);
+
+  console.log({ framework, architecture, db, language });
 
   const renameFiles = {
     _gitignore: '.gitignore',
@@ -23,10 +40,9 @@ async function init() {
     console.error(red(`Error: target directory is not empty.`));
     process.exit(1);
   }
-
   const templateDir = path.join(
     __dirname,
-    `template-${argv.t || argv.template || 'express'}`
+    `template-${framework}-${architecture}-${db}-${language}`
   );
 
   const write = async (file, content) => {

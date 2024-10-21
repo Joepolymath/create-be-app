@@ -1,6 +1,6 @@
 # create-be-app
 
-A command-line tool to quickly generate a bootstrapped backend project. Think of it as "create-react-app" for backend development!
+A light-weight,yet fast command-line tool to quickly generate a bootstrapped backend project. Think of it as "create-react-app" for backend development!
 
 ## Features
 
@@ -13,7 +13,7 @@ A command-line tool to quickly generate a bootstrapped backend project. Think of
 You can generate your backend project by running:
 
 ```bash
-npx create-be-app
+npx create-be-app <project-name>
 ```
 
 This command will walk you through setting up a new backend project with your preferred configurations.
