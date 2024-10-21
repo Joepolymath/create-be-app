@@ -1,7 +1,7 @@
 {
   "name": "create-be-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lightweight tooling to generate new nodejs backend project.",
   "main": "index.js",
   "bin": {
     "create-be-app": "index.js",
