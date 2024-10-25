@@ -3,6 +3,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const colors = require('picocolors');
 const argv = require('minimist')(process.argv.slice(2));
+const prompts = require('prompts');
+prompts.override(require('yargs').argv);
 
 const { green, red } = colors;
 
@@ -19,6 +21,58 @@ const checkIfTemplateExists = async (templateDirectory) => {
 
 async function init() {
   console.log(green('create-be-app running'));
+  const defaultFramework = 'express';
+  const defaultArchitecture = 'basic';
+  const defaultDb = 'mongodb';
+  const defaultLang = 'javascript';
+
+  // prompts section ===================================
+  const promptsList = [
+    {
+      type: 'select',
+      name: 'framework',
+      message: 'What framework would you like to use?',
+      // initial: defaultFramework,
+      choices: [
+        { title: 'Express', value: 'express' },
+        { title: 'Fastify', value: 'fastify' },
+      ],
+    },
+    {
+      type: 'select',
+      name: 'architecture',
+      message: 'What architecture/pattern would you like to use?',
+      choices: [
+        { title: 'Basic', value: 'basic' },
+        { title: 'Modular', value: 'modular' },
+      ],
+    },
+    {
+      type: 'select',
+      name: 'database',
+      message: 'What database would you like to use?',
+      choices: [
+        { title: 'Mongodb', value: 'mongodb' },
+        { title: 'Postgres', value: 'postgres' },
+      ],
+    },
+    {
+      type: 'select',
+      name: 'language',
+      message: 'What language would you like to use?',
+      choices: [
+        { title: 'TypeScript', value: 'ts' },
+        { title: 'JavaScript', value: 'js' },
+      ],
+    },
+  ];
+
+  // (async () => {
+  const response = await prompts(promptsList);
+  console.log({ response });
+  process.exit(1);
+
+  // end of prompts section ================================
 
   const framework = argv.f || argv.framework || 'express';
   const architecture = argv.a || argv.arch || 'basic';
@@ -28,7 +82,7 @@ async function init() {
   const cwd = process.cwd();
   const root = path.join(cwd, targetDir);
 
-  console.log({ framework, architecture, db, language });
+  // console.log({ framework, architecture, db, language });
 
   const renameFiles = {
     _gitignore: '.gitignore',
