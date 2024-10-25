@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const colors = require('picocolors');
 const argv = require('minimist')(process.argv.slice(2));
 const prompts = require('prompts');
+const { formatString } = require('./utils');
 prompts.override(require('yargs').argv);
 
 const { green, red } = colors;
@@ -26,6 +27,8 @@ async function init() {
   const defaultDb = 'mongodb';
   const defaultLang = 'javascript';
 
+  let selectedFramework = '';
+
   // prompts section ===================================
   const promptsList = [
     {
@@ -37,6 +40,10 @@ async function init() {
         { title: 'Express', value: 'express' },
         { title: 'Fastify', value: 'fastify' },
       ],
+      onState: (state) => {
+        console.log({ state });
+        selectedFramework = formatString(state.value) || defaultFramework;
+      },
     },
     {
       type: 'select',
@@ -69,6 +76,7 @@ async function init() {
 
   // (async () => {
   const response = await prompts(promptsList);
+  console.log({ selectedFramework });
   console.log({ response });
   process.exit(1);
 
