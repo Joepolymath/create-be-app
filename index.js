@@ -74,7 +74,6 @@ async function init() {
     },
   ];
 
-  // (async () => {
   const response = await prompts(promptsList);
   console.log({ selectedFramework });
   console.log({ response });
