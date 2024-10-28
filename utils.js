@@ -5,6 +5,12 @@ function formatString(stringInput) {
   return stringInput?.trim().replace(/\/+$/g, '');
 }
 
+function capitalizeFirstChar(str) {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 module.exports = {
   formatString,
+  capitalizeFirstChar,
 };

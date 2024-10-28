@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const colors = require('picocolors');
 const argv = require('minimist')(process.argv.slice(2));
 const prompts = require('prompts');
-const { formatString } = require('./utils');
+const { formatString, capitalizeFirstChar } = require('./utils.js');
 prompts.override(require('yargs').argv);
 
 const { green, red } = colors;
@@ -20,76 +20,87 @@ const checkIfTemplateExists = async (templateDirectory) => {
   }
 };
 
+// context layer ==> framwork.architecture.db.language
+const selectionContexts = {
+  express: {
+    basic: {
+      mongodb: {
+        js: 'js',
+      },
+    },
+    modular: {
+      mongodb: {
+        ts: 'ts',
+      },
+    },
+  },
+};
+
 async function init() {
   console.log(green('create-be-app running'));
   const defaultFramework = 'express';
-  const defaultArchitecture = 'basic';
-  const defaultDb = 'mongodb';
-  const defaultLang = 'javascript';
 
-  let selectedFramework = '';
+  // ========================= prompts section ===================================
 
-  // prompts section ===================================
-  const promptsList = [
+  const response = await prompts([
     {
       type: 'select',
       name: 'framework',
       message: 'What framework would you like to use?',
-      // initial: defaultFramework,
-      choices: [
-        { title: 'Express', value: 'express' },
-        { title: 'Fastify', value: 'fastify' },
-      ],
-      onState: (state) => {
-        console.log({ state });
-        selectedFramework = formatString(state.value) || defaultFramework;
-      },
+      choices: Object.keys(selectionContexts).map((framework) => {
+        return {
+          title: capitalizeFirstChar(framework),
+          value: framework,
+        };
+      }),
     },
     {
-      type: 'select',
+      type: (prev) => (prev ? 'select' : null),
       name: 'architecture',
       message: 'What architecture/pattern would you like to use?',
-      choices: [
-        { title: 'Basic', value: 'basic' },
-        { title: 'Modular', value: 'modular' },
-      ],
+      choices: (prev) =>
+        Object.keys(selectionContexts[prev || defaultFramework]).map(
+          (architecture) => ({
+            title: capitalizeFirstChar(architecture),
+            value: architecture,
+          })
+        ),
     },
     {
-      type: 'select',
+      type: (prev, values) => (prev ? 'select' : null),
       name: 'database',
       message: 'What database would you like to use?',
-      choices: [
-        { title: 'Mongodb', value: 'mongodb' },
-        { title: 'Postgres', value: 'postgres' },
-      ],
+      choices: (prev, values) =>
+        Object.keys(
+          selectionContexts[values.framework][values.architecture]
+        ).map((database) => ({
+          title: capitalizeFirstChar(database),
+          value: database,
+        })),
     },
     {
-      type: 'select',
+      type: (prev, values) => (prev ? 'select' : null),
       name: 'language',
       message: 'What language would you like to use?',
-      choices: [
-        { title: 'TypeScript', value: 'ts' },
-        { title: 'JavaScript', value: 'js' },
-      ],
+      choices: (prev, values) =>
+        Object.keys(
+          selectionContexts[values.framework][values.architecture][
+            values.database
+          ]
+        ).map((language) => ({
+          title: language.toUpperCase(),
+          value: language,
+        })),
     },
-  ];
+  ]);
 
-  const response = await prompts(promptsList);
-  console.log({ selectedFramework });
-  console.log({ response });
-  process.exit(1);
+  const { framework, architecture, database, language } = response;
 
   // end of prompts section ================================
 
-  const framework = argv.f || argv.framework || 'express';
-  const architecture = argv.a || argv.arch || 'basic';
-  const db = argv.d || argv.database || argv.db || 'mongodb';
-  const language = argv.l || argv.language || 'js';
   const targetDir = argv._[0] || '.';
   const cwd = process.cwd();
   const root = path.join(cwd, targetDir);
-
-  // console.log({ framework, architecture, db, language });
 
   const renameFiles = {
     _gitignore: '.gitignore',
@@ -103,8 +114,14 @@ async function init() {
   }
   const templateDir = path.join(
     __dirname,
-    `template-${framework}-${architecture}-${db}-${language}`
+    `template-${formatString(framework)}-${formatString(
+      architecture
+    )}-${formatString(database)}-${formatString(language)}`
   );
+
+  if (!checkIfTemplateExists(templateDir)) {
+    console.log(red(`Selected template does not exist: ${response}`));
+  }
 
   const write = async (file, content) => {
     const targetPath = renameFiles[file]
