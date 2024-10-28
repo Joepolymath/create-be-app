@@ -19,7 +19,10 @@ const checkIfTemplateExists = async (templateDirectory) => {
   }
 };
 
-// context layer ==> framwork.architecture.db.language
+/**
+ * context layer ==> framwork.architecture.db.language
+ * update this when adding new templates to this project...
+ */
 const selectionContexts = {
   express: {
     basic: {
