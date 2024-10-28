@@ -4,7 +4,6 @@ const fs = require('fs-extra');
 const colors = require('picocolors');
 const argv = require('minimist')(process.argv.slice(2));
 const prompts = require('prompts');
-const { formatString, capitalizeFirstChar } = require('./utils.js');
 prompts.override(require('yargs').argv);
 
 const { green, red } = colors;
@@ -150,6 +149,18 @@ async function init() {
   console.log(green(`  npm install (or \`yarn\` or \`pnpm\`)`));
   console.log(green(`  npm run dev (or \`yarn dev\` or \`pnpm\`)`));
   console.log();
+}
+
+function formatString(stringInput) {
+  if (typeof stringInput !== 'string') {
+    throw new Error(`[FORMAT-STRING]: Input must be string.`);
+  }
+  return stringInput?.trim().replace(/\/+$/g, '');
+}
+
+function capitalizeFirstChar(str) {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 init().catch((error) => {
