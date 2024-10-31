@@ -1,7 +1,6 @@
-import HttpException from '../../common/utilities/exceptions/http.exceptions';
-import Controller from '../../common/utilities/exceptions/http.exceptions';
 import { NextFunction, Router, Request, Response } from 'express';
 import AuthServices from './auth.service';
+import { Controller } from '@app/common';
 
 const authServices = new AuthServices();
 export default class AuthController implements Controller {
@@ -35,7 +34,7 @@ export default class AuthController implements Controller {
         .status(data.statusCode)
         .json({ ...data, message: data.message });
     } catch (error: any) {
-      next(new HttpException(500, error.message));
+      next(error);
     }
   }
 
@@ -50,7 +49,7 @@ export default class AuthController implements Controller {
         .status(data.statusCode)
         .json({ ...data, message: data.message });
     } catch (error: any) {
-      next(new HttpException(500, error.message));
+      next(error);
     }
   }
 
@@ -65,7 +64,7 @@ export default class AuthController implements Controller {
         .status(data.statusCode)
         .json({ ...data, message: data.message });
     } catch (error: any) {
-      next(new HttpException(500, error.message));
+      next(error);
     }
   }
 
@@ -80,7 +79,7 @@ export default class AuthController implements Controller {
         .status(data.statusCode)
         .json({ ...data, message: data.message });
     } catch (error: any) {
-      next(new HttpException(500, error.message));
+      next(error);
     }
   }
 }

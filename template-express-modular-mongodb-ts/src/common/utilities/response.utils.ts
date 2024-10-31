@@ -32,7 +32,7 @@ class ResponseUtils {
   public unauthorizedResponse(
     res: Response,
     message: string,
-    data: any = null,
+    data: any = null
   ) {
     if (data == null) {
       return res.status(403).json({ status: 'failure', message });
@@ -49,4 +49,4 @@ class ResponseUtils {
   }
 }
 
-export default new ResponseUtils();
+export const responseUtils = new ResponseUtils();

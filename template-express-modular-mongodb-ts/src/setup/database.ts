@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Bluebird from 'bluebird';
 
 import { DB_URI } from '../configs/env.config';
+import { logger } from '@app/configs';
 
 export const connectDb = function () {
   let db;
@@ -16,12 +17,12 @@ export const connectDb = function () {
   mongoose.connect(DB_URI, options);
   db = mongoose.connection;
   db.on('error', (err) => {
-    console.error('Error connecting to database.'.red, err);
+    logger.error('Error connecting to database.'.red, err);
   });
   db.once('connected', () => {
-    console.log('Database Connection is Successful'.blue.bold);
+    logger.info('Database Connection is Successful'.blue.bold);
   });
   db.once('disconnected', () => {
-    console.info('Database Disconnected');
+    logger.info('Database Disconnected');
   });
 };

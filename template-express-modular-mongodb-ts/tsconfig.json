@@ -17,10 +17,12 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "paths": {
-      "@app/*": ["src/*"],
-      "@app/common/*": ["src/common/*"],
-      "@app/configs/*": ["configs/*"],
-      "@app/env/*": ["src/env/*"]
+      "@app/*": ["*"],
+      "@common/*": ["src/common/*"],
+      "@configs/*": ["src/configs/*"],
+      "@env/*": ["env/*"],
+      "@modules": ["src/modules/*"],
+      "@constants": ["src/constants/*"]
     },
     // "strictBindCallApp
     /* Visit https://aka.ms/tsconfig to read more about this file */

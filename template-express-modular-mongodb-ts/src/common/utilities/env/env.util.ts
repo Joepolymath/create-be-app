@@ -1,6 +1,6 @@
 import { cleanEnv, str, port } from 'envalid';
 
-function validateEnv(): void {
+export function validateEnv(): void {
   cleanEnv(process.env, {
     NODE_ENV: str({
       choices: ['development', 'production'],
@@ -15,5 +15,3 @@ function validateEnv(): void {
     SEND_CHAMP_URL: str(),
   });
 }
-
-export default validateEnv;

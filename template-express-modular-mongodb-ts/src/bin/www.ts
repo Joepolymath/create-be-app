@@ -1,12 +1,14 @@
-require('module-alias/register');
+// require('module-alias/register');
+import 'module-alias/register';
+
 import http from 'http';
 import debugLib from 'debug';
 import 'module-alias';
 import { PORT } from '../configs/env.config';
-import logger from '../configs/logger.config';
 import App from '../app';
 import AuthController from '../modules/auth/auth.controller';
 import { connectDb } from '../setup/database';
+import { logger } from '@app/configs';
 
 const app = new App([new AuthController()]);
 

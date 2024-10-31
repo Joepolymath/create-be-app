@@ -1,6 +1,6 @@
 import { Document, FilterQuery, Model, Types } from 'mongoose';
 
-class DAL<T extends Document> {
+export class DAL<T extends Document> {
   private model: Model<T>;
   constructor(model: Model<T>) {
     this.model = model;
@@ -60,5 +60,3 @@ class DAL<T extends Document> {
     return await this.model.findByIdAndDelete(id);
   }
 }
-
-export default DAL;

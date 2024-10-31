@@ -1,8 +1,8 @@
 // database connection
 import mongoose from 'mongoose';
-import logger from './logger.config';
+import { logger } from './logger.config';
 
-const connectDb = async (uri: string) => {
+export const connectDb = async (uri: string) => {
   try {
     const conn = await mongoose.connect(uri);
     logger.info(
@@ -14,5 +14,3 @@ const connectDb = async (uri: string) => {
     process.exit(1);
   }
 };
-
-export default connectDb;

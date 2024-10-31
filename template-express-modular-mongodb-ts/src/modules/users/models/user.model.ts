@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IUser, Role } from '../../../common/@types/user.types';
+import { IUser, Role } from '../types';
 
 const userSchema = new mongoose.Schema<IUser>(
   {
@@ -53,4 +53,4 @@ const userSchema = new mongoose.Schema<IUser>(
   }
 );
 
-export default mongoose.model<IUser>('User', userSchema);
+export const userModel = mongoose.model<IUser>('User', userSchema);

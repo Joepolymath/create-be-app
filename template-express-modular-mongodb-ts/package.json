@@ -1,5 +1,5 @@
 {
-  "name": "ulesson",
+  "name": "edusproute",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "build": "rimraf dist && tsc -p .",
     "clean": "rimraf dist",
     "start": "node dist/bin/www.js",
-    "dev": "nodemon src/bin/www.ts"
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -38,9 +38,9 @@
     "winston": "^3.11.0"
   },
   "_moduleAliases": {
-    "@app/*": "src/*",
-    "@app/common/*": "src/common/*",
-    "@app/config/*": "src/config/*",
-    "@app/env/*": "src/env/*"
+    "@app/*": "src",
+    "@app/common/*": "src/common",
+    "@app/config/*": "src/config",
+    "@app/env/*": "src/env"
   }
 }

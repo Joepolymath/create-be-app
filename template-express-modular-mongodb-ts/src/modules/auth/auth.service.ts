@@ -1,15 +1,15 @@
-import { IUser, Role } from '../../common/@types/user.types';
-import DAL from '../../common/dataAccessLayer';
-import userModel from './models/user.model';
-import HttpException from '../../common/utilities/exceptions/http.exceptions';
-import bcrypt from '../../common/utilities/bcrypt';
-import { BCRYPT_SALT } from '../../configs/env.config';
-import responseUtils from '../../common/utilities/response.utils';
+import {
+  bcryptService,
+  DAL,
+  generateToken,
+  HttpException,
+  responseUtils,
+} from '@app/common';
+import { BCRYPT_SALT } from '@app/configs';
+import { IUser, Role } from '../users/types';
+import { userModel } from '../users/models';
 
 const userDAL = new DAL(userModel);
-const userDALInstance: typeof userDAL = new DAL(userModel);
-
-import { generateToken } from '../../common/utilities/authToken.utils';
 
 class AuthServices {
   private userRepo: typeof userDAL = new DAL(userModel);
@@ -25,11 +25,14 @@ class AuthServices {
     payload.role = Role.ADMIN;
 
     if (foundUser) {
-      return new HttpException(400, 'User already exists');
+      throw new HttpException(400, 'User already exists');
     }
 
-    const salt = await bcrypt.generateSalt(Number(BCRYPT_SALT));
-    const hashedPassword = await bcrypt.hashPassword(payload.password, salt);
+    const salt = await bcryptService.generateSalt(Number(BCRYPT_SALT));
+    const hashedPassword = await bcryptService.hashPassword(
+      payload.password,
+      salt
+    );
     payload.password = hashedPassword;
 
     const userInstance = await this.userRepo.create(payload);
@@ -46,13 +49,16 @@ class AuthServices {
     });
 
     if (foundUser) {
-      return new HttpException(400, 'User already exists');
+      throw new HttpException(400, 'User already exists');
     }
 
     payload.role = Role.USER;
 
-    const salt = await bcrypt.generateSalt(Number(BCRYPT_SALT));
-    const hashedPassword = await bcrypt.hashPassword(payload.password, salt);
+    const salt = await bcryptService.generateSalt(Number(BCRYPT_SALT));
+    const hashedPassword = await bcryptService.hashPassword(
+      payload.password,
+      salt
+    );
     payload.password = hashedPassword;
 
     const userInstance = await this.userRepo.create(payload);
@@ -66,19 +72,19 @@ class AuthServices {
     const foundUser = await this.userRepo.findOne({ email: payload.email });
 
     if (!foundUser) {
-      return new HttpException(400, 'User not found!');
+      throw new HttpException(400, 'User not found!');
     }
 
     if (foundUser.role != Role.ADMIN) {
-      return new HttpException(403, 'Forbidden: Only Admins Allowed');
+      throw new HttpException(403, 'Forbidden: Only Admins Allowed');
     }
 
-    const passwordFound = await bcrypt.compare(
+    const passwordFound = await bcryptService.compare(
       payload.password,
       foundUser.password
     );
     if (!passwordFound) {
-      return new HttpException(400, 'Password Incorrect!');
+      throw new HttpException(400, 'Password Incorrect!');
     }
 
     return responseUtils.buildResponse({
@@ -97,19 +103,19 @@ class AuthServices {
     const foundUser = await this.userRepo.findOne({ email: payload.email });
 
     if (!foundUser) {
-      return new HttpException(400, 'User not found!');
+      throw new HttpException(400, 'User not found!');
     }
 
     if (foundUser.role != Role.USER) {
-      return new HttpException(403, 'Forbidden: Only Users Allowed');
+      throw new HttpException(403, 'Forbidden: Only Users Allowed');
     }
 
-    const passwordFound = await bcrypt.compare(
+    const passwordFound = await bcryptService.compare(
       payload.password,
       foundUser.password
     );
     if (!passwordFound) {
-      return new HttpException(400, 'Password Incorrect!');
+      throw new HttpException(400, 'Password Incorrect!');
     }
 
     return responseUtils.buildResponse({
